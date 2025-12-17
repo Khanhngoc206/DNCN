@@ -21,3 +21,10 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+# ✅ HÀM BỊ THIẾU → GÂY LỖI
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
