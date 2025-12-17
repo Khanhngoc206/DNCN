@@ -145,6 +145,30 @@ def predict_size(request):
             error = str(e)
 
     return render(request, "predict_size.html", {"ketqua": ketqua, "error": error})
+def forecast_product_view(request, masanpham):
+    try:
+        res = requests.get(
+            f"{API_BASE}/forecast/sanpham/{masanpham}",
+            params={"so_thang": 12},
+            timeout=10
+        )
+
+        if res.status_code != 200:
+            return render(request, "forecast_product.html", {
+                "error": "Không có dữ liệu dự báo"
+            })
+
+        data = res.json()
+
+        return render(request, "forecast_product.html", {
+            "data": data,
+            "masanpham": masanpham
+        })
+
+    except Exception as e:
+        return render(request, "forecast_product.html", {
+            "error": str(e)
+        })
 
 
 # ============================================================
@@ -160,7 +184,43 @@ def admin_phienban(request): return render(request, "admin/admin_phienban.html")
 def admin_donhang(request): return render(request, "admin/admin_donhang.html")
 def admin_donhang_chitiet(request, id): return JsonResponse({"id": id})
 def admin_size(request): return render(request, "admin/admin_size.html")
-def admin_ai_model(request): return render(request, "admin/admin_ai_model.html")
+def admin_ai_model(request):
+    if request.session.get("role") != "admin":
+        return redirect("/admin/login/")
+
+    # 🔹 Lấy danh sách sản phẩm cho dropdown
+    sp_res = requests.get(f"{API}/sanpham/")
+    ds_sanpham = sp_res.json() if sp_res.status_code == 200 else []
+
+    masanpham = request.GET.get("masanpham")
+
+    labels, S, M, L, XL = [], [], [], [], []
+
+    if masanpham:
+        forecast_res = requests.get(
+            f"{API}/forecast/sanpham/{masanpham}",
+            params={"so_thang": 12}
+        )
+
+        if forecast_res.status_code == 200:
+            data = forecast_res.json()
+
+            for row in data:
+                labels.append(row.get("thang"))
+                S.append(row.get("S", 0))
+                M.append(row.get("M", 0))
+                L.append(row.get("L", 0))
+                XL.append(row.get("XL", 0))
+
+    return render(request, "admin/admin_ai_model.html", {
+        "ds_sanpham": ds_sanpham,
+        "masanpham": masanpham,
+        "labels": labels,
+        "S": S,
+        "M": M,
+        "L": L,
+        "XL": XL,
+    })
 
 def admin_truong_update(request): return JsonResponse({"ok": True})
 def admin_truong_delete(request): return JsonResponse({"ok": True})

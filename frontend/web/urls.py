@@ -47,4 +47,10 @@ urlpatterns = [
     path("admin/size/delete/", views_banhang.admin_size_delete),
     path("admin/donhang/status/", views_banhang.admin_donhang_update_status),
     path("admin/donhang/delete/", views_banhang.admin_donhang_delete),
+    path(
+    "forecast/sanpham/<int:masanpham>/",
+    views_banhang.forecast_product_view,
+    name="forecast_product"
+),
+
 ]
