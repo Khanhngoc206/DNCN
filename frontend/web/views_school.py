@@ -3,7 +3,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
-API_BASE = "https://dncn-backend.onrender.com"
+API_BASE = "https://backend.onrender.com"
 
 def school_login(request):
     if request.method == "POST":

@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
 
-API_BASE = "https://dncn-backend.onrender.com"
+API_BASE = "https://dncn.onrender.com"
 
 # ============================================================
 # HOME
@@ -189,7 +189,7 @@ def admin_ai_model(request):
         return redirect("/admin/login/")
 
     # 🔹 Lấy danh sách sản phẩm cho dropdown
-    sp_res = requests.get(f"{API}/sanpham/")
+    sp_res = requests.get(f"{API_BASE}/sanpham/")
     ds_sanpham = sp_res.json() if sp_res.status_code == 200 else []
 
     masanpham = request.GET.get("masanpham")
@@ -198,7 +198,7 @@ def admin_ai_model(request):
 
     if masanpham:
         forecast_res = requests.get(
-            f"{API}/forecast/sanpham/{masanpham}",
+            f"{API_BASE}/forecast/sanpham/{masanpham}",
             params={"so_thang": 12}
         )
 
