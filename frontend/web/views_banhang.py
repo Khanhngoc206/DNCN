@@ -211,7 +211,7 @@ def api_delete(path, token=None):
         return requests.delete(f"{API_BASE}{path}", headers=headers, timeout=10)
     except:
         return None
-
+@csrf_exempt
 def admin_login(request):
     error = None
 
