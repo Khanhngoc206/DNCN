@@ -163,3 +163,30 @@ def admin_dashboard(request):
 def admin_logout(request):
     request.session.flush()
     return redirect("/admin/login/")
+def increase_qty(request, key):
+    cart = request.session.get("cart", {})
+    key = str(key)
+    if key in cart:
+        cart[key]["soluong"] += 1
+    request.session["cart"] = cart
+    return redirect("/cart/")
+
+
+def decrease_qty(request, key):
+    cart = request.session.get("cart", {})
+    key = str(key)
+    if key in cart:
+        cart[key]["soluong"] -= 1
+        if cart[key]["soluong"] <= 0:
+            del cart[key]
+    request.session["cart"] = cart
+    return redirect("/cart/")
+
+
+def remove_from_cart(request, key):
+    cart = request.session.get("cart", {})
+    key = str(key)
+    if key in cart:
+        del cart[key]
+    request.session["cart"] = cart
+    return redirect("/cart/")
