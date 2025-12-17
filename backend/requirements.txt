@@ -10,3 +10,6 @@ bcrypt==4.1.2
 numpy
 scikit-learn
 joblib
+pandas
+python-jose
+
