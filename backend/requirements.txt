@@ -5,3 +5,5 @@ pydantic
 python-multipart
 psycopg2-binary
 PyJWT==2.8.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.1.2
