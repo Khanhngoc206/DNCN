@@ -30,59 +30,17 @@ def load_model(product_id: int):
         return pickle.load(f)
 
 
-def get_sale_history(db: Session, masanpham: int):
-    """
-    Trả về dataframe:
-    ds = ngày
-    y = số lượng bán theo ngày (sẽ gom theo tháng)
-    """
+def get_sale_history(db, masanpham):
+    query = (
+        db.query(
+            models.ChiTietDonHang.soluong,
+            models.DonHang.created_at
+        )
+        .join(
+            models.DonHang,
+            models.ChiTietDonHang.madonhang == models.DonHang.madonhang
+        )
+        .filter(models.ChiTietDonHang.masanpham == masanpham)
+    )
 
-    data = db.query(
-        models.CTDonHang.soluong,
-        models.DonHang.ngaydat
-    ).join(
-        models.DonHang, models.DonHang.id == models.CTDonHang.madon
-    ).join(
-        models.SanPhamPhienBan,
-        models.SanPhamPhienBan.id == models.CTDonHang.maphienban
-    ).filter(
-        models.SanPhamPhienBan.masanpham == masanpham
-    ).all()
-
-    if not data:
-        return None
-
-    df = pd.DataFrame(data, columns=["y", "ds"])
-
-    df["ds"] = pd.to_datetime(df["ds"])
-
-    # GOM THEO THÁNG
-    df = df.groupby(pd.Grouper(key="ds", freq="M")).sum().reset_index()
-
-    return df
-
-
-def forecast_product(db: Session, masanpham: int, so_thang: int = 12):
-    df = get_sale_history(db, masanpham)
-
-    if df is None or df.empty:
-        return None
-
-    # load model
-    model = load_model(masanpham)
-
-    # nếu chưa train → train lần đầu
-    if model is None:
-        from prophet import Prophet
-        model = Prophet()
-        model.fit(df)
-
-        save_path = os.path.join(MODEL_FOLDER, f"product_{masanpham}.pkl")
-        with open(save_path, "wb") as f:
-            pickle.dump(model, f)
-
-    # Tạo tương lai
-    future = model.make_future_dataframe(periods=so_thang, freq="M")
-    result = model.predict(future)
-
-    return result.tail(so_thang)[["ds", "yhat", "yhat_lower", "yhat_upper"]]
+    return query.all()
