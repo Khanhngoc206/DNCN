@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from sqlalchemy.orm import Session
 
-from backend import models
+import models
 
 MODEL_FOLDER = os.path.dirname(__file__)
 

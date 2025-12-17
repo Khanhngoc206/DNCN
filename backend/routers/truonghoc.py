@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from routers.auth import pwd
 
 from database import get_db
-from backend import models
+import models
 from models.truonghoc import TruongHoc
 from schemas.truonghoc import TruongCreate, TruongResponse
 

@@ -4,7 +4,7 @@ from database import get_db
 from models.donhang import DonHang
 from models.chitiet_donhang import ChiTietDonHang
 from schemas.donhang import DonHangCreate
-from backend import models
+import models
 from datetime import date
 
 router = APIRouter(prefix="/donhang", tags=["Đơn hàng"])
