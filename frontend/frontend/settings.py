@@ -26,14 +26,11 @@ SECRET_KEY = 'django-insecure-rjv#0yrsk*9$wp9i4!)i7_w@+5h=gghgk%9d7nh^p-p9u8yma3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
- "localhost",
-    "127.0.0.1",
-    "dncn-frontend.onrender.com"   # đổi theo tên service
-]
+ALLOWED_HOSTS = ["*"]
+
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://dncn-frontend.onrender.com"
+    "https://dncn-1.onrender.com",
 ]
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
