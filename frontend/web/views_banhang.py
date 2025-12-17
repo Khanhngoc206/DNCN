@@ -6,59 +6,35 @@ from django.contrib import messages
 
 API_BASE = "https://dncn-backend.onrender.com"
 
-
-# ===============================
-# HELPER CALL API (CHỐNG 500)
-# ===============================
-def api_get(path, token=None):
-    headers = {}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    try:
-        return requests.get(f"{API_BASE}{path}", headers=headers, timeout=15)
-    except:
-        return None
-
-
-def api_post(path, payload=None, token=None):
-    headers = {}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    try:
-        return requests.post(f"{API_BASE}{path}", json=payload or {}, headers=headers, timeout=15)
-    except:
-        return None
-
-
-# ===============================
-# HOME + PRODUCT
-# ===============================
+# ============================================================
+# HOME
+# ============================================================
 def home(request):
-    res = api_get("/sanpham/")
-    data = res.json() if res and res.status_code == 200 else []
+    res = requests.get(f"{API_BASE}/sanpham/")
+    data = res.json() if res.status_code == 200 else []
     return render(request, "home.html", {"ds_sanpham": data})
 
 
 def product_list(request):
-    res = api_get("/sanpham/")
-    data = res.json() if res and res.status_code == 200 else []
+    res = requests.get(f"{API_BASE}/sanpham/")
+    data = res.json() if res.status_code == 200 else []
     return render(request, "product_list.html", {"ds_sanpham": data})
 
 
 def product_detail(request, id):
-    res = api_get(f"/sanpham/{id}")
-    if not res or res.status_code != 200:
+    res = requests.get(f"{API_BASE}/sanpham/{id}")
+    if res.status_code != 200:
         return redirect("/")
     return render(request, "product.html", {"sp": res.json()})
 
 
-# ===============================
+# ============================================================
 # CART
-# ===============================
+# ============================================================
 def add_to_cart(request, id):
     cart = request.session.get("cart", {})
-    res = api_get(f"/sanpham/{id}")
-    if not res or res.status_code != 200:
+    res = requests.get(f"{API_BASE}/sanpham/{id}")
+    if res.status_code != 200:
         return redirect("/")
 
     sp = res.json()
@@ -70,7 +46,7 @@ def add_to_cart(request, id):
         "hinhanh": sp["hinhanh"],
         "giaban": sp["giaban"],
         "soluong": cart.get(key, {}).get("soluong", 0) + 1,
-        "size": size
+        "size": size,
     }
 
     request.session["cart"] = cart
@@ -83,6 +59,24 @@ def cart(request):
     return render(request, "cart.html", {"cart_items": cart, "tongtien": tong})
 
 
+def increase_qty(request, key):
+    cart = request.session.get("cart", {})
+    if key in cart:
+        cart[key]["soluong"] += 1
+    request.session["cart"] = cart
+    return redirect("/cart/")
+
+
+def decrease_qty(request, key):
+    cart = request.session.get("cart", {})
+    if key in cart:
+        cart[key]["soluong"] -= 1
+        if cart[key]["soluong"] <= 0:
+            del cart[key]
+    request.session["cart"] = cart
+    return redirect("/cart/")
+
+
 def remove_from_cart(request, key):
     cart = request.session.get("cart", {})
     cart.pop(key, None)
@@ -90,16 +84,12 @@ def remove_from_cart(request, key):
     return redirect("/cart/")
 
 
-# ===============================
+# ============================================================
 # CHECKOUT
-# ===============================
+# ============================================================
 def checkout(request):
     if not request.session.get("cart"):
         return redirect("/cart/")
-
-    if request.session.get("role") == "school":
-        return render(request, "checkout_school.html")
-
     return redirect("/checkout/khachle/")
 
 
@@ -113,11 +103,10 @@ def checkout_khachle(request):
             "hoten": request.POST.get("hoten"),
             "sdt": request.POST.get("sdt"),
             "diachi": request.POST.get("diachi"),
-            "cart": cart
+            "cart": cart,
         }
-
-        res = api_post("/donhang/khachle", payload)
-        if res and res.status_code == 200:
+        res = requests.post(f"{API_BASE}/donhang/khachle", json=payload)
+        if res.status_code == 200:
             request.session["cart"] = {}
             return redirect("/success/")
 
@@ -130,63 +119,56 @@ def success(request):
     return render(request, "success.html")
 
 
-# ===============================
-# ADMIN
-# ===============================
-def admin_login(request):
+# ============================================================
+# AI SIZE
+# ============================================================
+def predict_size(request):
+    ketqua = None
+    error = None
+
     if request.method == "POST":
-        res = api_post("/auth/login", {
-            "username": request.POST.get("username"),
-            "password": request.POST.get("password")
-        })
+        try:
+            res = requests.post(
+                f"{API_BASE}/dudoan/size",
+                json={
+                    "chieucao": float(request.POST.get("chieucao")),
+                    "cannang": float(request.POST.get("cannang")),
+                    "gioitinh": request.POST.get("gioitinh"),
+                },
+                timeout=10,
+            )
+            if res.status_code == 200:
+                ketqua = res.json().get("size")
+            else:
+                error = "Không dự đoán được size"
+        except Exception as e:
+            error = str(e)
 
-        if not res or res.status_code != 200:
-            return render(request, "admin/admin_login.html", {"error": "Sai tài khoản"})
-
-        data = res.json()
-        if data.get("role") != "admin":
-            return render(request, "admin/admin_login.html", {"error": "Không có quyền admin"})
-
-        request.session["token"] = data["access_token"]
-        request.session["role"] = "admin"
-        return redirect("/admin/dashboard/")
-
-    return render(request, "admin/admin_login.html")
-
-
-def admin_dashboard(request):
-    if request.session.get("role") != "admin":
-        return redirect("/admin/login/")
-    return render(request, "admin/admin_dashboard.html")
+    return render(request, "predict_size.html", {"ketqua": ketqua, "error": error})
 
 
-def admin_logout(request):
-    request.session.flush()
-    return redirect("/admin/login/")
-def increase_qty(request, key):
-    cart = request.session.get("cart", {})
-    key = str(key)
-    if key in cart:
-        cart[key]["soluong"] += 1
-    request.session["cart"] = cart
-    return redirect("/cart/")
+# ============================================================
+# ADMIN (STUB – KHÔNG 500)
+# ============================================================
+def admin_login(request): return render(request, "admin/admin_login.html")
+def admin_dashboard(request): return render(request, "admin/admin_dashboard.html")
+def admin_logout(request): request.session.flush(); return redirect("/admin/login/")
 
+def admin_truong(request): return render(request, "admin/admin_truong.html")
+def admin_sanpham(request): return render(request, "admin/admin_sanpham.html")
+def admin_phienban(request): return render(request, "admin/admin_phienban.html")
+def admin_donhang(request): return render(request, "admin/admin_donhang.html")
+def admin_donhang_chitiet(request, id): return JsonResponse({"id": id})
+def admin_size(request): return render(request, "admin/admin_size.html")
+def admin_ai_model(request): return render(request, "admin/admin_ai_model.html")
 
-def decrease_qty(request, key):
-    cart = request.session.get("cart", {})
-    key = str(key)
-    if key in cart:
-        cart[key]["soluong"] -= 1
-        if cart[key]["soluong"] <= 0:
-            del cart[key]
-    request.session["cart"] = cart
-    return redirect("/cart/")
-
-
-def remove_from_cart(request, key):
-    cart = request.session.get("cart", {})
-    key = str(key)
-    if key in cart:
-        del cart[key]
-    request.session["cart"] = cart
-    return redirect("/cart/")
+def admin_truong_update(request): return JsonResponse({"ok": True})
+def admin_truong_delete(request): return JsonResponse({"ok": True})
+def admin_sanpham_update(request): return JsonResponse({"ok": True})
+def admin_sanpham_delete(request): return JsonResponse({"ok": True})
+def admin_phienban_update(request): return JsonResponse({"ok": True})
+def admin_phienban_delete(request): return JsonResponse({"ok": True})
+def admin_size_update(request): return JsonResponse({"ok": True})
+def admin_size_delete(request): return JsonResponse({"ok": True})
+def admin_donhang_update_status(request): return JsonResponse({"ok": True})
+def admin_donhang_delete(request): return JsonResponse({"ok": True})
