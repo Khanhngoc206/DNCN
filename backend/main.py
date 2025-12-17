@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import Base, engine
-from backend.routers import (
+from routers import (
     truonghoc,
     khoilop,
     sanpham,
