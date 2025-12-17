@@ -1,4 +1,4 @@
-from backend.database import Base
+from database import Base
 
 from .truonghoc import TruongHoc
 from .khoilop import KhoiLop
