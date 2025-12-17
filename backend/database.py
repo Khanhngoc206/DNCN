@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://khanhngoc:reXDPp51z5wYQlx7RoW50hebXS7koPBG@dpg-d50op28gjchc73chm3u0-a.singapore-postgres.render.com/quanly_dongphuc"  # fallback local
+    "postgresql://khanhngoc:reXDPp51z5wYQlx7RoW50hebXS7koPBG@dpg-d50op28gjchc73chm3u0-a/quanly_dongphuc"  # fallback local
 )
 
 engine = create_engine(
