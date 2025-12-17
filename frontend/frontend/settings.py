@@ -24,14 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rjv#0yrsk*9$wp9i4!)i7_w@+5h=gghgk%9d7nh^p-p9u8yma3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-     "uniform-web.onrender.com"
+ "localhost",
+    "127.0.0.1",
+    "dncn-frontend.onrender.com"   # đổi theo tên service
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://uniform-web.onrender.com"
+    "https://dncn-frontend.onrender.com"
 ]
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
@@ -55,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'web.middleware.auth_middleware.AdminRequiredMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # ⭐
 ]
 
 ROOT_URLCONF = 'frontend.urls'
@@ -82,12 +85,7 @@ WSGI_APPLICATION = 'frontend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+DATABASES = {}
 
 
 # Password validation
@@ -125,7 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

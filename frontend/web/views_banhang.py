@@ -4,8 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
 
-API = "https://uniform-api.onrender.com"
-
+API = "https://dncn-backend.onrender.com"
 # =====================================================================
 # 🚀 TRANG CHÍNH – HOME
 # =====================================================================

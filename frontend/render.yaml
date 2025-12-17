@@ -1,11 +1,7 @@
 services:
   - type: web
-    name: uniform-web
+    name: dncn-frontend
     env: python
-    region: singapore
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn project.wsgi:application
-    envVars:
-      - key: SECRET_KEY
-        generateValue: true
+    startCommand: gunicorn frontend.wsgi:application

@@ -1,4 +1,6 @@
-Django
+Django>=4.2
 gunicorn
-requests
 psycopg2-binary
+whitenoise
+requests
+python-dotenv

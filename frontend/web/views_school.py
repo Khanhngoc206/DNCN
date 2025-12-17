@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import json
 
-API_BASE = "http://127.0.0.1:8000"
+API_BASE = API_BASE = "https://dncn-backend.onrender.com"
 
 # ============================================================
 # 1. FORM LOGIN TRƯỜNG

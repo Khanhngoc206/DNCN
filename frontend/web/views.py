@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render
 
-API = "http://127.0.0.1:8000"
+API = API_BASE = "https://dncn-backend.onrender.com"
 
 # ==================================
 # 1. TRƯỜNG HỌC
