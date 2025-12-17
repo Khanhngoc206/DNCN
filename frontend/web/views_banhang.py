@@ -430,14 +430,3 @@ def admin_ai_model(request):
         "L": L,
         "XL": XL,
     })
-
-def admin_truong_update(request): return JsonResponse({"ok": True})
-def admin_truong_delete(request): return JsonResponse({"ok": True})
-def admin_sanpham_update(request): return JsonResponse({"ok": True})
-def admin_sanpham_delete(request): return JsonResponse({"ok": True})
-def admin_phienban_update(request): return JsonResponse({"ok": True})
-def admin_phienban_delete(request): return JsonResponse({"ok": True})
-def admin_size_update(request): return JsonResponse({"ok": True})
-def admin_size_delete(request): return JsonResponse({"ok": True})
-def admin_donhang_update_status(request): return JsonResponse({"ok": True})
-def admin_donhang_delete(request): return JsonResponse({"ok": True})
