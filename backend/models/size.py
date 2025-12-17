@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey, String
-from backend.database import Base
+from database import Base
 
 class SizePhienBan(Base):
     __tablename__ = "size_phienban"

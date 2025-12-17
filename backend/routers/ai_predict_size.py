@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from backend.database import get_db
+from database import get_db
 
 router = APIRouter(prefix="/predict", tags=["AI Dự báo"])
 

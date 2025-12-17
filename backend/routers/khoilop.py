@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
+from database import get_db
 from backend import models
-from backend.schemas.khoilop import KhoiLopCreate, KhoiLopResponse
+from schemas.khoilop import KhoiLopCreate, KhoiLopResponse
 
 router = APIRouter(prefix="/khoilop", tags=["Khối lớp"])
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from backend.schemas.dudoan import SizePredictRequest, SizePredictResponse
-from backend.ml.predictor import predict_size
+from schemas.dudoan import SizePredictRequest, SizePredictResponse
+from ml.predictor import predict_size
 
 router = APIRouter(prefix="/dudoan", tags=["Dự đoán size"])
 

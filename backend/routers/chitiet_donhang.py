@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
+from database import get_db
 from backend import models
-from backend.schemas.chitiet_donhang import CTDonHangCreate, CTDonHangResponse
+from schemas.chitiet_donhang import CTDonHangCreate, CTDonHangResponse
 
 router = APIRouter(prefix="/ctdonhang", tags=["Chi tiết đơn hàng"])
 

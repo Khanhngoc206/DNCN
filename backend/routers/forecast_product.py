@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.ml.forecast_product import forecast_product
+from database import get_db
+from ml.forecast_product import forecast_product
 
 router = APIRouter(prefix="/forecast", tags=["Dự báo theo sản phẩm"])
 

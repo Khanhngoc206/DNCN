@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from backend.routers.auth import pwd
+from routers.auth import pwd
 
-from backend.database import get_db
+from database import get_db
 from backend import models
-from backend.models.truonghoc import TruongHoc
-from backend.schemas.truonghoc import TruongCreate, TruongResponse
+from models.truonghoc import TruongHoc
+from schemas.truonghoc import TruongCreate, TruongResponse
 
 router = APIRouter(prefix="/truonghoc", tags=["Trường học"])
 

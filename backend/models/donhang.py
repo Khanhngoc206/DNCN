@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, Date, DECIMAL, String, ForeignKey
-from backend.database import Base
+from database import Base
 
 class DonHang(Base):
     __tablename__ = "donhang"

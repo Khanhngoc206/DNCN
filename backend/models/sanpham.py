@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Numeric
-from backend.database import Base
+from database import Base
 class SanPham(Base):
     __tablename__ = "sanpham"
     __table_args__ = {"schema": "giaodich"}

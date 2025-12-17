@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from backend.database import get_db
-from backend.models.donhang import DonHang
-from backend.models.chitiet_donhang import ChiTietDonHang
-from backend.schemas.donhang import DonHangCreate
+from database import get_db
+from models.donhang import DonHang
+from models.chitiet_donhang import ChiTietDonHang
+from schemas.donhang import DonHangCreate
 from backend import models
 from datetime import date
 

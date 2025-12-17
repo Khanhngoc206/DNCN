@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
+from database import get_db
 from backend import models
-from backend.schemas.size import SizeCreate, SizeResponse
+from schemas.size import SizeCreate, SizeResponse
 
 router = APIRouter(prefix="/size", tags=["Size – Tồn kho"])
 

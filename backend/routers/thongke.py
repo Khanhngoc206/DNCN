@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
 
-from backend.database import get_db
-from backend.models.donhang import DonHang
-from backend.models.chitiet_donhang import ChiTietDonHang
-from backend.models.phienban import SanPhamPhienBan
-from backend.models.sanpham import SanPham  # 🔥 nhớ import đúng bảng sản phẩm
+from database import get_db
+from models.donhang import DonHang
+from models.chitiet_donhang import ChiTietDonHang
+from models.phienban import SanPhamPhienBan
+from models.sanpham import SanPham  # 🔥 nhớ import đúng bảng sản phẩm
 
 router = APIRouter(tags=["Thống kê"])
 

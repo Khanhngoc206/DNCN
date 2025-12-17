@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from backend.ml.predictor_forecast import du_bao_nam
+from ml.predictor_forecast import du_bao_nam
 
 router = APIRouter(prefix="/forecast", tags=["Dự báo nhu cầu"])
 

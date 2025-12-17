@@ -2,13 +2,13 @@ from fastapi import APIRouter, HTTPException, Depends
 import jwt
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from backend.database import get_db
-from backend.models.taikhoan import TaiKhoan
-from backend.models.truonghoc import TruongHoc
-from backend.schemas.taikhoan import LoginRequest, RegisterRequest, TaiKhoanResponse
-from backend.utils.jwt_token import create_access_token
-from backend.schemas.auth import LoginSchema
-from backend.schemas.taikhoan import LoginRequest, RegisterRequest, TaiKhoanResponse
+from database import get_db
+from models.taikhoan import TaiKhoan
+from models.truonghoc import TruongHoc
+from schemas.taikhoan import LoginRequest, RegisterRequest, TaiKhoanResponse
+from utils.jwt_token import create_access_token
+from schemas.auth import LoginSchema
+from schemas.taikhoan import LoginRequest, RegisterRequest, TaiKhoanResponse
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 

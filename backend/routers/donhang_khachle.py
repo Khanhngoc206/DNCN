@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from datetime import date
 
-from backend.database import get_db
-from backend.models.donhang import DonHang
-from backend.models.chitiet_donhang import ChiTietDonHang
+from database import get_db
+from models.donhang import DonHang
+from models.chitiet_donhang import ChiTietDonHang
 
 router = APIRouter(prefix="/donhang_khachle", tags=["Khách lẻ"])
 

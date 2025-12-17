@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.models.phienban import SanPhamPhienBan
-from backend.schemas.phienban import PhienBanCreate, PhienBanResponse
+from database import get_db
+from models.phienban import SanPhamPhienBan
+from schemas.phienban import PhienBanCreate, PhienBanResponse
 
 router = APIRouter(prefix="/phienban", tags=["Phiên bản sản phẩm"])
 

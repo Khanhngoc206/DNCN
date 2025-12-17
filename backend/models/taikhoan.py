@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from datetime import datetime
-from backend.database import Base
+from database import Base
 
 class TaiKhoan(Base):
     __tablename__ = "taikhoan"

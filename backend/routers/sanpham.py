@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from backend.database import get_db
-from backend.models.sanpham import SanPham
-from backend.models.phienban import SanPhamPhienBan
-from backend.models.size import SizePhienBan
-from backend.schemas.sanpham import (
+from database import get_db
+from models.sanpham import SanPham
+from models.phienban import SanPhamPhienBan
+from models.size import SizePhienBan
+from schemas.sanpham import (
     SanPhamCreate,
     SanPhamUpdate,
     SanPhamResponse
