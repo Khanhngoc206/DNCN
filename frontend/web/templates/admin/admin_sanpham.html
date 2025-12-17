@@ -1,0 +1,42 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Sản phẩm{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">🛒 Quản lý sản phẩm</h3>
+
+<a class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCreate">
+    + Thêm sản phẩm
+</a>
+
+<table class="table table-bordered table-hover shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Mã SP</th>
+            <th>Tên SP</th>
+            <th>Giá</th>
+            <th>Ảnh</th>
+            <th width="150">Hành động</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for sp in ds_sanpham %}
+        <tr>
+    <td>{{ sp.masanpham }}</td>
+    <td>{{ sp.tensanpham }}</td>
+    <td>{{ sp.giaban }}₫</td>
+    <td>Không có ảnh</td>
+    <td>
+        <button class="btn btn-sm btn-warning">Sửa</button>
+        <button class="btn btn-sm btn-danger">Xóa</button>
+    </td>
+</tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include "admin/modal_sp_create.html" %}
+{% include "admin/modal_sp_edit.html" %}
+{% include "admin/modal_sp_delete.html" %}
+{% endblock %}

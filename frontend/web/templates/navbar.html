@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+  <div class="container">
+
+    <!-- LOGO -->
+    <a class="navbar-brand fw-bold" href="/">Đồng phục học sinh</a>
+
+    <!-- TOGGLE MOBILE -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navMenu"
+      aria-controls="navMenu"
+      aria-expanded="false"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- MENU -->
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+
+        {% if request.session.school_logged_in %}
+          <!-- SCHOOL LOGGED IN -->
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-white" href="/school/home/">
+              🎓 {{ request.session.school_name }}
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/school/order/">
+              Đặt hàng cho trường
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link text-warning fw-semibold" href="/school/logout/">
+              Đăng xuất
+            </a>
+          </li>
+
+        {% else %}
+          <!-- GUEST -->
+          <li class="nav-item">
+            <a class="nav-link active" href="/">Trang chủ</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/product/">Sản phẩm</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/cart/">Giỏ hàng</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-warning" href="/admin/login/">
+              Admin
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/school/login/">
+              Trường học
+            </a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>

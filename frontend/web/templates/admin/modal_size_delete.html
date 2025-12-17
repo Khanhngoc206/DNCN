@@ -1,0 +1,38 @@
+<div class="modal fade" id="modalDeleteSize_{{ s.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Xóa size</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form method="POST" action="/admin/size/delete/">
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="{{ s.id }}">
+
+                    <p>Bạn có chắc muốn xóa size 
+                       <b>{{ s.size }}</b> của phiên bản:
+                       <br>
+                       {% for pb in ds_phienban %}
+                           {% if pb.id == s.phienban_id %}
+                                <b>{{ pb.mau }}</b> —
+                                {% for sp in ds_sanpham %}
+                                    {% if sp.id == pb.sanpham_id %}
+                                        {{ sp.ten }}
+                                    {% endif %}
+                                {% endfor %}
+                           {% endif %}
+                       {% endfor %}
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button class="btn btn-danger">Xóa</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

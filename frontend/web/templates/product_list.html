@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h2 class="mb-4 fw-bold">Danh sách sản phẩm</h2>
+
+    <div class="row g-4">
+        {% for sp in ds_sanpham %}
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+
+                <img src="{{ sp.hinhanh }}" class="card-img-top" style="height:220px; object-fit:cover;" alt="Ảnh sản phẩm">
+
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ sp.tensanpham }}</h5>
+                    <p class="text-primary fw-bold">{{ sp.giaban }} VND</p>
+
+                    <a href="/sanpham/{{ sp.masanpham }}/" class="btn btn-outline-primary btn-sm">
+                        Xem chi tiết
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

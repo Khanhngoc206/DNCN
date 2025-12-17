@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Danh sách trường học{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Danh sách trường học</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Mã trường</th>
+            <th>Tên trường</th>
+            <th>Địa chỉ</th>
+            <th>Số điện thoại</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in ds_truong %}
+        <tr>
+            <td>{{ t.matruong }}</td>
+            <td>{{ t.tentruong }}</td>
+            <td>{{ t.diachi }}</td>
+            <td>{{ t.sodienthoai }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

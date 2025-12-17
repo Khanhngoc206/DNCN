@@ -1,0 +1,109 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}AI Model Dự báo{% endblock %}
+
+{% block content %}
+<h3 class="mb-4">🤖 AI Model – Dự báo số lượng size theo tháng</h3>
+
+<div class="card p-3 mb-4">
+    <h5 class="mb-3">Bảng số liệu</h5>
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Tháng</th>
+                <th>Size S</th>
+                <th>Size M</th>
+                <th>Size L</th>
+                <th>Size XL</th>
+            </tr>
+        </thead>
+        {% load list_extras %}
+
+<table class="table table-bordered">
+    <thead class="table-light">
+        <tr>
+            <th>Tháng</th>
+            <th>Size S</th>
+            <th>Size M</th>
+            <th>Size L</th>
+            <th>Size XL</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for label in labels %}
+        <tr>
+            <td>{{ label }}</td>
+            <td>{{ S|index:forloop.counter0 }}</td>
+            <td>{{ M|index:forloop.counter0 }}</td>
+            <td>{{ L|index:forloop.counter0 }}</td>
+            <td>{{ XL|index:forloop.counter0 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+    </table>
+</div>
+
+<div class="row">
+
+<!-- LINE CHART -->
+<div class="col-md-6">
+    <div class="card p-3 mb-4">
+        <h5 class="mb-3">📈 Biểu đồ đường (Line Chart)</h5>
+        <canvas id="lineChart"></canvas>
+    </div>
+</div>
+
+<!-- BAR CHART -->
+<div class="col-md-6">
+    <div class="card p-3 mb-4">
+        <h5 class="mb-3">📊 Biểu đồ cột (Bar Chart)</h5>
+        <canvas id="barChart"></canvas>
+    </div>
+</div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const labels = {{ labels|safe }};
+const dataS = {{ S|safe }};
+const dataM = {{ M|safe }};
+const dataL = {{ L|safe }};
+const dataXL = {{ XL|safe }};
+
+// ==================== LINE CHART ====================
+new Chart(document.getElementById('lineChart'), {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            { label: 'Size S', data: dataS, borderColor: 'blue' },
+            { label: 'Size M', data: dataM, borderColor: 'green' },
+            { label: 'Size L', data: dataL, borderColor: 'orange' },
+            { label: 'Size XL', data: dataXL, borderColor: 'red' }
+        ]
+    }
+});
+
+// ==================== BAR CHART ====================
+new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            { label: 'Size S', data: dataS, backgroundColor: 'blue' },
+            { label: 'Size M', data: dataM, backgroundColor: 'green' },
+            { label: 'Size L', data: dataL, backgroundColor: 'orange' },
+            { label: 'Size XL', data: dataXL, backgroundColor: 'red' }
+        ]
+    },
+    options: { responsive: true }
+});
+</script>
+
+{% endblock %}

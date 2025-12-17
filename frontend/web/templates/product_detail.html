@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="row">
+        <!-- Ảnh sản phẩm -->
+        <div class="col-md-5">
+            <img src="{{ sp.hinhanh }}" class="img-fluid rounded shadow" alt="{{ sp.tensanpham }}">
+        </div>
+
+        <!-- Thông tin -->
+        <div class="col-md-7">
+            <h2 class="fw-bold">{{ sp.tensanpham }}</h2>
+
+            <p class="text-muted mt-2">{{ sp.mota }}</p>
+
+            <h3 class="text-danger fw-bold mt-3">
+                {{ sp.giaban }} VND
+            </h3>
+
+         <a href="/cart/add/{{ sp.masanpham }}/" class="btn btn-primary btn-lg mt-4">
+    Thêm vào giỏ hàng
+</a>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

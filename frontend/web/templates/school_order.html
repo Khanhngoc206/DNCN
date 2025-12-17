@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="text-center mt-4">Đặt đồng phục số lượng lớn</h1>
+
+<div class="container mt-4">
+
+<table class="table table-bordered align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Size</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+        </tr>
+    </thead>
+
+    <tbody id="order-rows">
+        {% for sp in products %}
+        <tr data-product-id="{{ sp.masanpham }}">
+            <td><strong>{{ sp.tensanpham }}</strong></td>
+
+            <td>
+                <select class="form-select size-select">
+                    <option value="">-- Chọn size --</option>
+                </select>
+            </td>
+
+            <td>
+                <input type="number"
+                       class="form-control qty-input"
+                       value="0"
+                       min="0">
+            </td>
+
+            <td class="price-box">0 đ</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h4 class="text-end mt-3">
+    Tổng tiền:
+    <span id="total-price" class="text-danger fw-bold">0 đ</span>
+</h4>
+
+<div class="text-end">
+    <button id="submit-btn" class="btn btn-primary btn-lg mt-3">
+        Gửi đơn
+    </button>
+</div>
+
+</div>
+
+<script>
+const API_BASE = "http://127.0.0.1:8000";
+
+/* =====================================
+   1. LOAD SIZE + ĐƠN GIÁ
+===================================== */
+async function loadSizes() {
+    for (let row of document.querySelectorAll("#order-rows tr")) {
+        const masanpham = row.dataset.productId;
+        const select = row.querySelector(".size-select");
+
+        try {
+            const res = await fetch(`${API_BASE}/sanpham/phienban/${masanpham}`);
+            const data = await res.json();
+
+            data.forEach(item => {
+                const opt = document.createElement("option");
+                opt.value = item.masize;
+                opt.textContent = `Size ${item.size}`;
+                opt.dataset.price = item.dongia;              // ✅ QUAN TRỌNG
+                opt.dataset.maphienban = item.maphienban;    // ✅ QUAN TRỌNG
+                select.appendChild(opt);
+            });
+
+        } catch (err) {
+            console.error("Lỗi load size:", err);
+        }
+    }
+}
+
+/* =====================================
+   2. TÍNH GIÁ TỪ dongia
+===================================== */
+function updateRow(row) {
+    const qty = Number(row.querySelector(".qty-input").value || 0);
+    const opt = row.querySelector(".size-select").selectedOptions[0];
+
+    const dongia = Number(opt?.dataset.price || 0);
+    const thanhtien = dongia * qty;
+
+    row.querySelector(".price-box").textContent =
+        thanhtien.toLocaleString("vi-VN") + " đ";
+
+    updateTotal();
+}
+
+function updateTotal() {
+    let sum = 0;
+    document.querySelectorAll(".price-box").forEach(box => {
+        sum += Number(box.textContent.replace(/\D/g, "") || 0);
+    });
+
+    document.getElementById("total-price").textContent =
+        sum.toLocaleString("vi-VN") + " đ";
+}
+
+/* =====================================
+   3. GẮN EVENT
+===================================== */
+function bindEvents() {
+    document.querySelectorAll("#order-rows tr").forEach(row => {
+        row.querySelector(".size-select")
+            .addEventListener("change", () => updateRow(row));
+
+        row.querySelector(".qty-input")
+            .addEventListener("input", () => updateRow(row));
+    });
+}
+
+/* =====================================
+   4. SUBMIT → GỬI dongia
+===================================== */
+document.getElementById("submit-btn").addEventListener("click", async () => {
+    const cart = {};
+
+    document.querySelectorAll("#order-rows tr").forEach(row => {
+        const masanpham = row.dataset.productId;
+        const qty = Number(row.querySelector(".qty-input").value || 0);
+        const opt = row.querySelector(".size-select").selectedOptions[0];
+
+        if (qty > 0 && opt) {
+            cart[masanpham] = {
+                maphienban: Number(opt.dataset.maphienban),
+                tensize: opt.textContent.replace("Size ", ""),
+                soluong: qty,
+                dongia: Number(opt.dataset.price)   // ✅ ĐÚNG TÊN
+            };
+        }
+    });
+
+    if (Object.keys(cart).length === 0) {
+        alert("Vui lòng chọn ít nhất 1 sản phẩm");
+        return;
+    }
+
+    const res = await fetch("/school/order/submit/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ cart })
+    });
+
+    if (res.ok) {
+        alert("🎉 Gửi đơn thành công!");
+        location.reload();
+    } else {
+        alert("❌ Gửi đơn thất bại");
+    }
+});
+
+/* =====================================
+   INIT
+===================================== */
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadSizes();
+    bindEvents();
+});
+</script>
+
+{% endblock %}

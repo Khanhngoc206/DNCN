@@ -1,0 +1,100 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>🏫 Quản lý Trường học</h3>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddTruong">
+            + Thêm trường học
+        </button>
+    </div>
+
+    <table class="table table-bordered align-middle table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th style="width: 80px;">ID</th>
+                <th>Tên trường</th>
+                <th>Địa chỉ</th>
+                <th>SĐT</th>
+                <th style="width: 180px;">Hành động</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for t in ds_truong %}
+            <tr>
+                <td>{{ t.matruong }}</td>
+                <td>{{ t.tentruong }}</td>
+                <td>{{ t.diachi }}</td>
+                <td>{{ t.sodienthoai }}</td>
+
+                <td>
+                    <button class="btn btn-warning btn-sm"
+                        onclick="openEditTruong({{ t.matruong }})">
+                        Sửa
+                    </button>
+
+                    <button class="btn btn-danger btn-sm"
+                        onclick="deleteTruong({{ t.matruong }})">
+                        Xóa
+                    </button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">Không có dữ liệu</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+const API = "http://127.0.0.1:8000";
+
+// ==================== DELETE ====================
+function deleteTruong(id) {
+    if (!confirm("Xóa trường này?")) return;
+
+    fetch(`${API}/truonghoc/${id}`, { method: "DELETE" })
+        .then(() => location.reload());
+}
+
+// ==================== EDIT ====================
+function openEditTruong(id) {
+    fetch(`${API}/truonghoc/${id}`)
+        .then(r => r.json())
+        .then(t => {
+            document.getElementById("edit_ten").value = t.tentruong;
+            document.getElementById("edit_diachi").value = t.diachi;
+            document.getElementById("edit_sdt").value = t.sodienthoai;
+
+            document.getElementById("editForm").setAttribute("data-id", id);
+
+            new bootstrap.Modal(document.getElementById("modalEdit")).show();
+        });
+}
+
+function saveTruong() {
+    let id = document.getElementById("editForm").getAttribute("data-id");
+
+    let data = {
+        tentruong: document.getElementById("edit_ten").value,
+        diachi: document.getElementById("edit_diachi").value,
+        sodienthoai: document.getElementById("edit_sdt").value
+    };
+
+    fetch(`${API}/truonghoc/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    }).then(() => location.reload());
+}
+</script>
+
+{% include "admin/modal_truong_create.html" %}
+{% include "admin/modal_truong_edit.html" %}
+{% include "admin/modal_truong_delete.html" %}
+{% endblock %}

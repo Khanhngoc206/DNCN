@@ -1,0 +1,41 @@
+<div class="modal fade" id="modalEditTruong_{{ t.matruong }}" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title">Sửa trường học</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <form method="POST" action="/admin/truong/update/">
+        <div class="modal-body">
+
+          <!-- ID đúng -->
+          <input type="hidden" name="matruong" value="{{ t.matruong }}">
+
+          <div class="mb-3">
+            <label class="form-label">Tên trường</label>
+            <input name="tentruong" class="form-control" value="{{ t.tentruong }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Địa chỉ</label>
+            <input name="diachi" class="form-control" value="{{ t.diachi }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Số điện thoại</label>
+            <input name="sodienthoai" class="form-control" value="{{ t.sodienthoai }}" required>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button class="btn btn-warning">Cập nhật</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

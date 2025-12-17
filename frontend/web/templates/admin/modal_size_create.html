@@ -1,0 +1,41 @@
+<div class="modal fade" id="modalCreateSize">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Thêm size</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <label>Phiên bản</label>
+                <select id="c_pb" class="form-control">
+                    {% for p in ds_phienban %}
+                    <option value="{{ p.maphienban }}">
+                        {{ p.tensanpham }} - {{ p.mausac }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label class="mt-2">Tên size</label>
+                <select id="c_size" class="form-control">
+                    <option>S</option>
+                    <option>M</option>
+                    <option>L</option>
+                    <option>XL</option>
+                    <option>XXL</option>
+                </select>
+
+                <label class="mt-2">Số lượng tồn</label>
+                <input id="c_ton" type="number" class="form-control">
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="createSize()">Thêm</button>
+            </div>
+
+        </div>
+    </div>
+</div>

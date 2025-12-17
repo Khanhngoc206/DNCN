@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Khối lớp{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Danh sách khối lớp</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Mã khối</th>
+            <th>Mã trường</th>
+            <th>Tên khối</th>
+            <th>Màu sắc áo thể dục</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for k in ds_khoi %}
+        <tr>
+            <td>{{ k.makhoi }}</td>
+            <td>{{ k.matruong }}</td>
+            <td>{{ k.tenkhoi }}</td>
+            <td>{{ k.mausac_aotheduc }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

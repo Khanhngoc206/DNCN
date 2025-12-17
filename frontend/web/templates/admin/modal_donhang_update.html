@@ -1,0 +1,31 @@
+<div class="modal fade" id="modalUpdate">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật trạng thái đơn hàng</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <input id="update_id" hidden>
+
+                <label>Chọn trạng thái</label>
+                <select id="update_status" class="form-select mt-2">
+                    <option value="pending">Chờ xử lý</option>
+                    <option value="confirmed">Đã xác nhận</option>
+                    <option value="shipping">Đang giao</option>
+                    <option value="done">Hoàn thành</option>
+                    <option value="cancel">Đã hủy</option>
+                </select>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="updateTrangThai()">Lưu</button>
+            </div>
+
+        </div>
+    </div>
+</div>

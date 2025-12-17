@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    body {
+        background: #f4f6f9;
+    }
+    
+    .sidebar {
+        height: 100vh;
+        background: #1e1f23;
+        padding-top: 25px;
+    }
+
+    .sidebar a {
+        color: #ddd;
+        text-decoration: none;
+        padding: 12px 20px;
+        display: block;
+        font-size: 15px;
+        transition: 0.2s;
+    }
+
+    .sidebar a:hover {
+        background: #34363a;
+        color: #fff;
+    }
+
+    .sidebar .active {
+        background: #0d6efd;
+        color: white;
+        border-radius: 6px;
+    }
+
+    .card-box {
+        border-radius: 10px;
+        padding: 25px;
+        border: none;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.15);
+        transition: 0.25s;
+    }
+
+    .card-box:hover {
+        transform: translateY(-5px);
+    }
+
+    .icon-box {
+        font-size: 35px;
+        color: #0d6efd;
+    }
+
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- SIDEBAR -->
+        <div class="col-2 sidebar">
+            <h4 class="text-white text-center mb-4">Admin Panel</h4>
+
+            <a href="/admin/dashboard" class="active">📊 Dashboard</a>
+            <a href="/admin/truong">🏫 Quản lý trường học</a>
+            <a href="/admin/sanpham">👕 Quản lý sản phẩm</a>
+            <a href="/admin/phienban">🎨 Quản lý phiên bản</a>
+            <a href="/admin/size">📦 Quản lý tồn kho</a>
+            <a href="/admin/orders">🧾 Đơn hàng</a>
+            <a href="/admin/logout">🚪 Đăng xuất</a>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="col-10 p-4">
+
+            <h2 class="mb-4 fw-bold">📊 Admin Dashboard</h2>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <div class="card card-box">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box">🏫</div>
+                            <div class="ms-3">
+                                <h5>Trường học</h5>
+                                <p class="text-muted">Quản lý thông tin trường</p>
+                                <a href="/admin/truong" class="btn btn-primary btn-sm">Quản lý</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card card-box">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box">👕</div>
+                            <div class="ms-3">
+                                <h5>Sản phẩm</h5>
+                                <p class="text-muted">Quản lý áo – quần đồng phục</p>
+                                <a href="/admin/sanpham" class="btn btn-primary btn-sm">Quản lý</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card card-box">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box">🎨</div>
+                            <div class="ms-3">
+                                <h5>Phiên bản</h5>
+                                <p class="text-muted">Màu sắc – phân loại sản phẩm</p>
+                                <a href="/admin/phienban" class="btn btn-primary btn-sm">Quản lý</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card card-box">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box">📦</div>
+                            <div class="ms-3">
+                                <h5>Tồn kho</h5>
+                                <p class="text-muted">Quản lý size & kho</p>
+                                <a href="/admin/size" class="btn btn-primary btn-sm">Quản lý</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card card-box">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box">🧾</div>
+                            <div class="ms-3">
+                                <h5>Đơn hàng</h5>
+                                <p class="text-muted">Tình trạng đặt hàng</p>
+                                <a href="/admin/orders" class="btn btn-primary btn-sm">Quản lý</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

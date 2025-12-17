@@ -1,0 +1,42 @@
+<div class="modal fade" id="modalStatus" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form action="/admin/donhang/status/" method="POST">
+        {% csrf_token %}
+
+        <div class="modal-header">
+          <h5 class="modal-title">Cập nhật trạng thái đơn hàng</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+            <input type="hidden" id="status_id" name="id">
+
+            <label class="form-label">Chọn trạng thái mới:</label>
+            <select name="trangthai" class="form-select">
+                <option value="Chờ duyệt">Chờ duyệt</option>
+                <option value="Đang xử lý">Đang xử lý</option>
+                <option value="Hoàn thành">Hoàn thành</option>
+                <option value="Đã hủy">Đã hủy</option>
+            </select>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button class="btn btn-warning" type="submit">Cập nhật</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function openStatus(id) {
+    document.getElementById("status_id").value = id;
+    let modal = new bootstrap.Modal(document.getElementById("modalStatus"));
+    modal.show();
+}
+</script>

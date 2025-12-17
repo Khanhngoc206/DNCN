@@ -1,0 +1,35 @@
+<div class="modal fade" id="modalDelete" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form action="/admin/donhang/delete/" method="POST">
+        {% csrf_token %}
+        <input type="hidden" id="delete_id" name="id">
+
+        <div class="modal-header">
+          <h5 class="modal-title text-danger">Xóa đơn hàng</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <p>Bạn có chắc chắn muốn xóa đơn hàng này?</p>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button class="btn btn-danger" type="submit">Xóa</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function openDelete(id) {
+    document.getElementById("delete_id").value = id;
+    let modal = new bootstrap.Modal(document.getElementById("modalDelete"));
+    modal.show();
+}
+</script>

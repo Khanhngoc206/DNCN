@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="fw-bold mb-4">🛒 Giỏ hàng của bạn</h3>
+
+    {% if cart_items %}
+    <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Ảnh</th>
+                <th>Sản phẩm</th>
+                <th>Size</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td width="120">
+                    <img src="{{ item.hinhanh }}" class="img-fluid rounded">
+                </td>
+
+                <td>{{ item.tensanpham }}</td>
+
+                <!-- ✔ HIỂN THỊ SIZE -->
+                <td>
+                    <span class="badge bg-info text-dark px-3 py-2">{{ item.size }}</span>
+                </td>
+
+                <td class="text-danger fw-bold">{{ item.giaban }}₫</td>
+
+                <td>
+                    <div class="d-flex gap-2">
+                        <a href="/cart/decrease/{{ item.key }}/"
+                           class="btn btn-outline-secondary btn-sm">−</a>
+
+                        <span class="px-2 mt-1">{{ item.soluong }}</span>
+
+                        <a href="/cart/increase/{{ item.key }}/"
+                           class="btn btn-outline-secondary btn-sm">+</a>
+                    </div>
+                </td>
+
+                <td class="fw-bold text-primary">{{ item.thanhtien }}₫</td>
+
+                <td>
+                    <a href="/cart/remove/{{ item.key }}/" class="btn btn-danger btn-sm">
+                        Xóa
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-end mt-3">
+        <h4 class="fw-bold">Tổng tiền: <span class="text-danger">{{ tongtien }}₫</span></h4>
+        <a href="/checkout/" class="btn btn-lg btn-primary mt-3">Tiến hành đặt hàng</a>
+    </div>
+
+    {% else %}
+    <p class="text-muted">Giỏ hàng của bạn đang trống.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

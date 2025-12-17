@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Trang quản trị{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body { background-color: #f5f6fa; }
+        .sidebar {
+            width: 240px;
+            min-height: 100vh;
+            background: #0d6efd;
+        }
+        .sidebar a {
+            color: white;
+            padding: 12px 20px;
+            display: block;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .topbar {
+            background: white;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+<div class="d-flex">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h4 class="text-center text-white py-3">Admin Panel</h4>
+        <a href="/admin/dashboard/">📊 Dashboard</a>
+        <a href="/admin/truong/">🏫 Trường học</a>
+        <a href="/admin/sanpham/">🛒 Sản phẩm</a>
+        <a href="/admin/phienban/">📦 Phiên bản</a>
+        <a href="/admin/size/">📐 Size – Tồn kho</a>
+        <a href="/admin/donhang/">🧾 Đơn hàng</a>
+        <a href="/admin/ai-model/">
+        🤖 AI Model dự báo
+    </a>
+</li>
+
+        <a href="/admin/logout/" class="text-warning fw-bold">🚪 Đăng xuất</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-grow-1">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            Xin chào, <b>{{ request.session.username }}</b>
+        </div>
+
+        <!-- PAGE CONTENT -->
+        <div class="container py-4">
+            {% block content %}{% endblock %}
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

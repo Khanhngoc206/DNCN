@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+    {% if sp %}
+        <div class="row">
+            <div class="col-md-5">
+                <img src="{{ sp.hinhanh }}" class="img-fluid rounded" alt="Ảnh sản phẩm">
+            </div>
+
+            <div class="col-md-7">
+                <h2>{{ sp.tensanpham }}</h2>
+                <h4 class="text-danger mt-3">{{ sp.giaban }} VND</h4>
+
+                <p class="mt-4">{{ sp.mota }}</p>
+
+                <!-- FORM THÊM VÀO GIỎ HÀNG -->
+                <form action="/giohang/add/{{ sp.masanpham }}/" method="post" class="mt-4">
+                    {% csrf_token %}
+
+                    <label class="fw-bold">Chọn size:</label>
+                    <select name="size" class="form-control w-50 mt-2" required>
+                        {% for size in sp.sizes %}
+                            <option value="{{ size }}">{{ size }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button class="btn btn-primary btn-lg mt-4">
+                        🛒 Thêm vào giỏ
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    {% else %}
+        <h3 class="text-center mt-5 text-danger">Không tìm thấy sản phẩm.</h3>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Quản lý Size – Tồn kho{% endblock %}
+
+{% block content %}
+
+<h3 class="mb-4">📏 Quản lý Size – Tồn kho</h3>
+
+<!-- BUTTON THÊM -->
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCreateSize">
+    + Thêm size
+</button>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th width="60">ID</th>
+                    <th width="200">Phiên bản</th>
+                    <th width="80">Size</th>
+                    <th width="100">Tồn kho</th>
+                    <th width="150">Hành động</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for s in ds_size %}
+               <tr>
+    <td>{{ s.idsize }}</td>
+
+    <td>
+        {% for pb in ds_phienban %}
+            {% if pb.maphienban == s.maphienban %}
+                {{ pb.mausac }} –
+                {% for sp in ds_sanpham %}
+                    {% if sp.masanpham == pb.masanpham %}
+                        {{ sp.tensanpham }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </td>
+
+    <td>{{ s.size }}</td>
+    <td>{{ s.tonkho }}</td>
+
+    <td>
+        <button class="btn btn-sm btn-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#modalEditSize_{{ s.idsize }}">
+            Sửa
+        </button>
+
+        <button class="btn btn-sm btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#modalDeleteSize_{{ s.idsize }}">
+            Xóa
+        </button>
+    </td>
+</tr>
+
+
+                {% include "admin/modal_size_edit.html" %}
+                {% include "admin/modal_size_delete.html" %}
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include "admin/modal_size_create.html" %}
+{% include "admin/modal_size_edit.html" %}
+{% include "admin/modal_size_delete.html" %}
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Phiên bản sản phẩm{% endblock %}
+
+{% block content %}
+
+<h3 class="mb-4">📦 Quản lý phiên bản sản phẩm</h3>
+
+<!-- BUTTON THÊM -->
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCreatePB">
+    + Thêm phiên bản
+</button>
+
+<!-- TABLE -->
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th width="80">ID</th>
+                    <th width="180">Sản phẩm</th>
+                    <th>Màu sắc</th>
+                    <th width="120">Giá</th>
+                    <th width="80">Ảnh</th>
+                    <th width="150">Hành động</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for pb in ds_phienban %}
+               <tr>
+    <td>{{ pb.maphienban }}</td>
+
+    <td>
+        {% for sp in ds_sanpham %}
+            {% if sp.masanpham == pb.masanpham %}
+                {{ sp.tensanpham }}
+            {% endif %}
+        {% endfor %}
+    </td>
+
+    <td>{{ pb.mausac }}</td>
+    <td>Không có giá</td>
+    <td>Không có ảnh</td>
+
+    <td>
+        <button class="btn btn-sm btn-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#modalEditPB_{{ pb.maphienban }}">
+            Sửa
+        </button>
+
+        <button class="btn btn-sm btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#modalDeletePB_{{ pb.maphienban }}">
+            Xóa
+        </button>
+    </td>
+</tr>
+
+
+                {% include "admin/modal_pb_edit.html" %}
+                {% include "admin/modal_pb_delete.html" %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include "admin/modal_pb_create.html" %}
+{% include "admin/modal_pb_edit.html" %}
+{% include "admin/modal_pb_delete.html" %}
+{% endblock %}
+    

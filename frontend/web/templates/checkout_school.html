@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h3 class="fw-bold mb-4">🏫 Đặt hàng dành cho trường học</h3>
+
+    <div class="alert alert-info">
+        Trường: <strong>{{ request.session.school_name }}</strong>
+    </div>
+
+    <div class="card p-4 shadow-sm">
+        <h5 class="fw-bold">Danh sách sản phẩm</h5>
+
+        <ul class="list-group mb-3">
+            {% for masp, item in cart.items %}
+            <li class="list-group-item d-flex justify-content-between">
+                <div>
+                    <strong>{{ item.tensanpham }}</strong><br>
+                    SL: {{ item.soluong }}
+                </div>
+                <span class="text-danger fw-bold">{{ item.gia }}₫</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button class="btn btn-primary btn-lg w-100">Xác nhận đặt hàng</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

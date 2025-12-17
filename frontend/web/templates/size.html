@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Tồn kho size{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Tồn kho size theo phiên bản SP</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Mã phiên bản</th>
+            <th>Size</th>
+            <th>Số lượng tồn</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in ds_size %}
+        <tr>
+            <td>{{ s.maphienban }}</td>
+            <td>{{ s.tensize }}</td>
+            <td>{{ s.soluongton }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

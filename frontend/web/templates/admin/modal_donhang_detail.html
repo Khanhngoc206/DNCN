@@ -1,0 +1,44 @@
+<div>
+    <h5>Thông tin đơn hàng</h5>
+    <hr>
+
+    <p><strong>Mã đơn:</strong> {{ data.madon }}</p>
+
+    {% if data.matruong %}
+    <p><strong>Thuộc trường:</strong> Trường #{{ data.matruong }}</p>
+    {% endif %}
+
+    <p><strong>Ngày đặt:</strong> {{ data.ngay }}</p>
+    <p><strong>Tổng tiền:</strong> {{ data.tongtien|floatformat:"0" }}₫</p>
+    <p><strong>Trạng thái:</strong> {{ data.trangthai }}</p>
+
+    <hr>
+    <h5>Chi tiết sản phẩm</h5>
+
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Mã SP</th>
+                <th>Mã phiên bản</th>
+                <th>Size</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for item in data.items %}
+            <tr>
+                <td>{{ item.masanpham }}</td>
+                <td>{{ item.maphienban }}</td>
+                <td>{{ item.masize }}</td>
+                <td>{{ item.soluong }}</td>
+                <td>{{ item.dongia|floatformat:"0" }}₫</td>
+                <td>{{ item.thanhtien|floatformat:"0" }}₫</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Phiên bản sản phẩm{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Danh sách phiên bản sản phẩm</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Mã phiên bản</th>
+            <th>Mã SP</th>
+            <th>Màu sắc</th>
+            <th>Ảnh</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in ds_phienban %}
+        <tr>
+            <td>{{ p.maphienban }}</td>
+            <td>{{ p.masanpham }}</td>
+            <td>{{ p.mausac }}</td>
+            <td><img src="{{ p.anh }}" width="60"></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

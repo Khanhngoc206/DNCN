@@ -1,0 +1,33 @@
+<div class="modal fade" id="modalCreatePB">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Thêm phiên bản</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <label>Sản phẩm</label>
+                <select id="c_sp" class="form-control">
+                    {% for sp in ds_sanpham %}
+                    <option value="{{ sp.masanpham }}">{{ sp.tensanpham }}</option>
+                    {% endfor %}
+                </select>
+
+                <label class="mt-2">Màu sắc</label>
+                <input id="c_mausac" class="form-control">
+
+                <label class="mt-2">Giá</label>
+                <input id="c_gia" type="number" class="form-control">
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="createPB()">Thêm</button>
+            </div>
+
+        </div>
+    </div>
+</div>
