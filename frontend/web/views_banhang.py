@@ -174,16 +174,211 @@ def forecast_product_view(request, masanpham):
 # ============================================================
 # ADMIN (STUB – KHÔNG 500)
 # ============================================================
-def admin_login(request): return render(request, "admin/admin_login.html")
-def admin_dashboard(request): return render(request, "admin/admin_dashboard.html")
-def admin_logout(request): request.session.flush(); return redirect("/admin/login/")
 
-def admin_truong(request): return render(request, "admin/admin_truong.html")
-def admin_sanpham(request): return render(request, "admin/admin_sanpham.html")
-def admin_phienban(request): return render(request, "admin/admin_phienban.html")
-def admin_donhang(request): return render(request, "admin/admin_donhang.html")
-def admin_donhang_chitiet(request, id): return JsonResponse({"id": id})
-def admin_size(request): return render(request, "admin/admin_size.html")
+def api_get(path, token=None, params=None):
+    headers = {}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    try:
+        return requests.get(f"{API_BASE}{path}", headers=headers, params=params, timeout=10)
+    except:
+        return None
+
+def api_post(path, data=None, token=None):
+    headers = {"Content-Type": "application/json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    try:
+        return requests.post(f"{API_BASE}{path}", json=data, headers=headers, timeout=10)
+    except:
+        return None
+
+def api_put(path, data=None, token=None):
+    headers = {"Content-Type": "application/json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    try:
+        return requests.put(f"{API_BASE}{path}", json=data, headers=headers, timeout=10)
+    except:
+        return None
+
+def api_delete(path, token=None):
+    headers = {}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    try:
+        return requests.delete(f"{API_BASE}{path}", headers=headers, timeout=10)
+    except:
+        return None
+
+def admin_login(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        res = api_post("/auth/login", {
+            "username": username,
+            "password": password
+        })
+
+        if res.status_code != 200:
+            return render(request, "admin/admin_login.html", {
+                "error": "Sai tài khoản hoặc mật khẩu"
+            })
+
+        data = res.json()
+        role = data.get("role") or data.get("user", {}).get("role")
+
+        if role != "admin":
+            return render(request, "admin/admin_login.html", {
+                "error": "Bạn không có quyền admin"
+            })
+
+        request.session["token"] = data["access_token"]
+        request.session["role"] = "admin"
+
+        return redirect("/admin/dashboard/")
+
+    return render(request, "admin/admin_login.html")
+def admin_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.session.get("role") != "admin":
+            return redirect("/admin/login/")
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+def admin_dashboard(request):
+    return render(request, "admin/admin_dashboard.html")
+def admin_logout(request):
+    request.session.flush()
+    return redirect("/admin/login/")
+
+def admin_truong(request):
+    token = request.session.get("token")
+    res = api_get("/truonghoc/", token)
+    ds_truong = res.json() if res and res.status_code == 200 else []
+    return render(request, "admin/admin_truong.html", {"ds_truong": ds_truong})
+
+
+def admin_truong_update(request):
+    token = request.session.get("token")
+    if request.method == "POST":
+        matr = request.POST.get("matruong")
+        tentruong = request.POST.get("tentruong")
+        diachi = request.POST.get("diachi")
+        api_put(f"/truonghoc/{matr}", {
+            "tentruong": tentruong,
+            "diachi": diachi
+        }, token)
+    return redirect("/admin/truong/")
+
+
+def admin_truong_delete(request):
+    token = request.session.get("token")
+    if request.method == "POST":
+        matr = request.POST.get("matruong")
+        api_delete(f"/truonghoc/{matr}", token)
+    return redirect("/admin/truong/")
+
+def admin_sanpham(request):
+    token = request.session.get("token")
+    res = api_get("/sanpham/", token)
+    ds_sanpham = res.json() if res and res.status_code == 200 else []
+    return render(request, "admin/admin_sanpham.html", {"ds_sanpham": ds_sanpham})
+
+
+def admin_sanpham_update(request):
+    token = request.session.get("token")
+    if request.method == "POST":
+        id = request.POST.get("id")
+        api_put(f"/sanpham/{id}", {
+            "tensanpham": request.POST.get("ten"),
+            "giaban": request.POST.get("gia"),
+            "hinhanh": request.POST.get("hinhanh")
+        }, token)
+    return redirect("/admin/sanpham/")
+
+
+def admin_sanpham_delete(request):
+    token = request.session.get("token")
+    if request.method == "POST":
+        id = request.POST.get("id")
+        api_delete(f"/sanpham/{id}", token)
+    return redirect("/admin/sanpham/")
+def admin_phienban(request):
+    token = request.session.get("token")
+    headers = {"Authorization": f"Bearer {token}"}
+
+    try:
+        pb_res = requests.get(f"{API_BASE}/phienban/", headers=headers, timeout=10)
+        sp_res = requests.get(f"{API_BASE}/sanpham/", headers=headers, timeout=10)
+
+        ds_phienban = pb_res.json() if pb_res.status_code == 200 else []
+        ds_sanpham = sp_res.json() if sp_res.status_code == 200 else []
+
+    except:
+        ds_phienban, ds_sanpham = [], []
+
+    return render(request, "admin/admin_phienban.html", {
+        "ds_phienban": ds_phienban,
+        "ds_sanpham": ds_sanpham
+    })
+def admin_donhang(request):
+    token = request.session.get("token")
+    headers = {"Authorization": f"Bearer {token}"}
+
+    try:
+        res = requests.get(f"{API_BASE}/donhang/", headers=headers, timeout=10)
+        ds_donhang = res.json() if res.status_code == 200 else []
+    except:
+        ds_donhang = []
+
+    return render(request, "admin/admin_donhang.html", {
+        "ds_donhang": ds_donhang
+    })
+@admin_required
+def admin_donhang_chitiet(request, id):
+    token = request.session.get("token")
+    headers = {"Authorization": f"Bearer {token}"}
+
+    try:
+        res = requests.get(f"{API_BASE}/donhang/{id}", headers=headers, timeout=10)
+        if res.status_code == 200:
+            return JsonResponse(res.json(), safe=False)
+    except:
+        pass
+
+    return JsonResponse(
+        {"error": "Không tìm thấy đơn hàng"},
+        status=404
+    )
+def admin_size(request):
+    token = request.session.get("token")
+    size = api_get("/size/", token)
+    pb = api_get("/phienban/", token)
+
+    return render(request, "admin/admin_size.html", {
+        "ds_size": size.json() if size and size.status_code == 200 else [],
+        "ds_phienban": pb.json() if pb and pb.status_code == 200 else [],
+    })
+
+
+def admin_size_update(request):
+    token = request.session.get("token")
+    if request.method == "POST":
+        id = request.POST.get("id")
+        api_put(f"/size/{id}", {
+            "tonkho": request.POST.get("tonkho")
+        }, token)
+    return redirect("/admin/size/")
+
+
+def admin_size_delete(request):
+    token = request.session.get("token")
+    if request.method == "POST":
+        id = request.POST.get("id")
+        api_delete(f"/size/{id}", token)
+    return redirect("/admin/size/")
 def admin_ai_model(request):
     if request.session.get("role") != "admin":
         return redirect("/admin/login/")
