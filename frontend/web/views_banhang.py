@@ -216,8 +216,13 @@ def admin_login(request):
     error = None
 
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "").strip()
+
+        if not username or not password:
+            return render(request, "admin/admin_login.html", {
+                "error": "Vui lòng nhập đầy đủ tài khoản và mật khẩu"
+            })
 
         try:
             res = requests.post(
@@ -230,14 +235,16 @@ def admin_login(request):
             )
 
             if res.status_code != 200:
-                error = "Sai tài khoản hoặc mật khẩu"
-                return render(request, "admin/admin_login.html", {"error": error})
+                return render(request, "admin/admin_login.html", {
+                    "error": "Sai tài khoản hoặc mật khẩu"
+                })
 
             data = res.json()
 
             if data.get("role") != "admin":
-                error = "Tài khoản không có quyền admin"
-                return render(request, "admin/admin_login.html", {"error": error})
+                return render(request, "admin/admin_login.html", {
+                    "error": "Tài khoản không có quyền admin"
+                })
 
             # ✅ LƯU SESSION
             request.session["token"] = data["access_token"]
@@ -246,13 +253,18 @@ def admin_login(request):
 
             return redirect("/admin/dashboard/")
 
-        except requests.exceptions.RequestException as e:
-            error = f"Lỗi kết nối API: {e}"
+        except requests.exceptions.RequestException:
+            return render(request, "admin/admin_login.html", {
+                "error": "Không kết nối được API Backend"
+            })
 
         except Exception as e:
-            error = f"Lỗi hệ thống: {e}"
+            return render(request, "admin/admin_login.html", {
+                "error": f"Lỗi hệ thống: {str(e)}"
+            })
 
-    return render(request, "admin/admin_login.html", {"error": error})
+    return render(request, "admin/admin_login.html")
+
 
 def admin_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -350,7 +362,6 @@ def admin_donhang(request):
     return render(request, "admin/admin_donhang.html", {
         "ds_donhang": ds_donhang
     })
-@admin_required
 def admin_donhang_chitiet(request, id):
     token = request.session.get("token")
     headers = {"Authorization": f"Bearer {token}"}
