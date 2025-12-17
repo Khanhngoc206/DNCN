@@ -212,34 +212,45 @@ def api_delete(path, token=None):
         return None
 
 def admin_login(request):
+    error = None
+
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        res = api_post("/auth/login", {
-            "username": username,
-            "password": password
-        })
+        try:
+            res = requests.post(
+                f"{API_BASE}/auth/login",
+                json={
+                    "username": username,
+                    "password": password
+                },
+                timeout=10
+            )
 
-        if res.status_code != 200:
-            return render(request, "admin/admin_login.html", {
-                "error": "Sai tài khoản hoặc mật khẩu"
-            })
+            if res.status_code != 200:
+                error = "Sai tài khoản hoặc mật khẩu"
+                return render(request, "admin/admin_login.html", {"error": error})
 
-        data = res.json()
-        role = data.get("role") or data.get("user", {}).get("role")
+            data = res.json()
 
-        if role != "admin":
-            return render(request, "admin/admin_login.html", {
-                "error": "Bạn không có quyền admin"
-            })
+            # 🔐 KIỂM TRA ROLE
+            if data.get("role") != "admin":
+                error = "Tài khoản không có quyền admin"
+                return render(request, "admin/admin_login.html", {"error": error})
 
-        request.session["token"] = data["access_token"]
-        request.session["role"] = "admin"
+            # ✅ LƯU SESSION
+            request.session["token"] = data["access_token"]
+            request.session["role"] = "admin"
+            request.session["username"] = data["username"]
 
-        return redirect("/admin/dashboard/")
+            return redirect("/admin/dashboard/")
 
-    return render(request, "admin/admin_login.html")
+        except Exception as e:
+            error = f"Lỗi kết nối API: {e}"
+
+    return render(request, "admin/admin_login.html", {"error": error})
+
 def admin_required(view_func):
     def wrapper(request, *args, **kwargs):
         if request.session.get("role") != "admin":
