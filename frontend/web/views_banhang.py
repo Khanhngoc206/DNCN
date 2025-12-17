@@ -3,6 +3,7 @@ import requests
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 
 API_BASE = "https://dncn.onrender.com"
 
@@ -234,7 +235,6 @@ def admin_login(request):
 
             data = res.json()
 
-            # 🔐 KIỂM TRA ROLE
             if data.get("role") != "admin":
                 error = "Tài khoản không có quyền admin"
                 return render(request, "admin/admin_login.html", {"error": error})
@@ -246,8 +246,11 @@ def admin_login(request):
 
             return redirect("/admin/dashboard/")
 
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
             error = f"Lỗi kết nối API: {e}"
+
+        except Exception as e:
+            error = f"Lỗi hệ thống: {e}"
 
     return render(request, "admin/admin_login.html", {"error": error})
 
