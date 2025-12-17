@@ -36,17 +36,6 @@ urlpatterns = [
     path("admin/size/", views_banhang.admin_size),
     path("admin/ai-model/", views_banhang.admin_ai_model),
     path("admin/logout/", views_banhang.admin_logout),
-
-    path("admin/truong/update/", views_banhang.admin_truong_update),
-    path("admin/truong/delete/", views_banhang.admin_truong_delete),
-    path("admin/sanpham/update/", views_banhang.admin_sanpham_update),
-    path("admin/sanpham/delete/", views_banhang.admin_sanpham_delete),
-    path("admin/phienban/update/", views_banhang.admin_phienban_update),
-    path("admin/phienban/delete/", views_banhang.admin_phienban_delete),
-    path("admin/size/update/", views_banhang.admin_size_update),
-    path("admin/size/delete/", views_banhang.admin_size_delete),
-    path("admin/donhang/status/", views_banhang.admin_donhang_update_status),
-    path("admin/donhang/delete/", views_banhang.admin_donhang_delete),
     path(
     "forecast/sanpham/<int:masanpham>/",
     views_banhang.forecast_product_view,
