@@ -7,7 +7,7 @@ from django.contrib import messages
 # =========================
 # ✅ API BACKEND (Render)
 # =========================
-API = "https://dncn-backend.onrender.com"   # <-- đổi đúng backend của bạn
+API = "https://dncn.onrender.com"   # <-- đổi đúng backend của bạn
 
 
 # =========================================================
