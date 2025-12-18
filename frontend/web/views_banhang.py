@@ -441,3 +441,38 @@ def admin_donhang_chitiet(request, id):
 def admin_logout(request):
     request.session.flush()
     return redirect("/admin/login/")
+@admin_required
+def admin_ai_model(request):
+    token = request.session.get("token")
+
+    # 🔹 Danh sách sản phẩm
+    sp_res = safe_get("/sanpham/")
+    ds_sanpham = sp_res.json() if sp_res.status_code == 200 else []
+
+    masanpham = request.GET.get("masanpham")
+
+    labels, S, M, L, XL = [], [], [], [], []
+
+    if masanpham:
+        forecast_res = safe_get(
+            f"/forecast/sanpham/{masanpham}",
+            params={"so_thang": 12}
+        )
+
+        if forecast_res.status_code == 200:
+            for row in forecast_res.json():
+                labels.append(row.get("thang"))
+                S.append(row.get("S", 0))
+                M.append(row.get("M", 0))
+                L.append(row.get("L", 0))
+                XL.append(row.get("XL", 0))
+
+    return render(request, "admin/admin_ai_model.html", {
+        "ds_sanpham": ds_sanpham,
+        "masanpham": masanpham,
+        "labels": labels,
+        "S": S,
+        "M": M,
+        "L": L,
+        "XL": XL,
+    })
