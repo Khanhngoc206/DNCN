@@ -23,10 +23,25 @@ def product_list(request):
 
 
 def product_detail(request, id):
-    res = requests.get(f"{API_BASE}/sanpham/{id}")
-    if res.status_code != 200:
+    sp_res = requests.get(f"{API_BASE}/sanpham/{id}")
+    size_res = requests.get(f"{API_BASE}/size/")
+
+    if sp_res.status_code != 200:
         return redirect("/")
-    return render(request, "product.html", {"sp": res.json()})
+
+    sp = sp_res.json()
+    sizes = []
+
+    if size_res.status_code == 200:
+        sizes = [
+            s for s in size_res.json()
+            if s["masanpham"] == sp["masanpham"] and s["tonkho"] > 0
+        ]
+
+    return render(request, "product.html", {
+        "sp": sp,
+        "sizes": sizes
+    })
 
 
 # ============================================================
