@@ -476,3 +476,8 @@ def admin_ai_model(request):
         "L": L,
         "XL": XL,
     })
+def forecast_product_view(request):
+    if request.session.get("role") != "admin":
+        return redirect("/admin/login/")
+
+    return render(request, "admin/admin_ai_model.html")
